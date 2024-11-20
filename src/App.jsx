@@ -3,7 +3,7 @@ import { io } from "socket.io-client"
 import Chat from "./component/Chat"
 
 import './css/tailwind.css'
-a
+
 function App() {
   const socket = io("https://groupchat-socketio-backend-production.up.railway.app/")
 
