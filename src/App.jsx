@@ -5,7 +5,7 @@ import Chat from "./component/Chat"
 import './css/tailwind.css'
 
 function App() {
-  const socket = io("https://groupchat-socketio-backend-production.up.railway.app/")
+  const socket = io("https://groupchat-socketio-backend-production.up.railway.app")
 
   const [username, setUserName] = useState("")
   const [room, setRoom] = useState("")
