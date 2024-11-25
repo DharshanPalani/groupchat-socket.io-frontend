@@ -19,7 +19,10 @@ function Chat({ socket, username, room }) {
     }
   };
 
-  const reloadPage = () => window.location.reload();
+  const exitRoom = () => {
+    window.location.reload();
+    socket.emit("exit_room", { username, room });
+  };
 
   useEffect(() => {
     socket.on("receive_message", (data) => {
@@ -32,7 +35,7 @@ function Chat({ socket, username, room }) {
       <div className='bg-[#23272a] text-white p-3 text-lg font-bold border-b border-[#1e2124] flex items-center justify-between'>
         <button
           className='bg-gray-600 text-white py-1 px-3 rounded-md hover:bg-gray-400'
-          onClick={reloadPage}
+          onClick={exitRoom}
         >
           Exit
         </button>
