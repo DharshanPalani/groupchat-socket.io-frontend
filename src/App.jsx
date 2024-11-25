@@ -1,47 +1,77 @@
-import { useState } from "react"
-import { io } from "socket.io-client"
-import Chat from "./component/Chat"
+import { useState } from "react";
+import { io } from "socket.io-client";
+import Chat from "./component/Chat";
 
-import './css/tailwind.css'
+import "./css/tailwind.css";
 
 function App() {
-  const socket = io("https://groupchat-socketio-backend-production.up.railway.app")
+  const socket = io(
+    "https://groupchat-socketio-backend-production.up.railway.app"
+  );
+  // const socket = io("http://localhost:3001")
 
-  const [username, setUserName] = useState("")
-  const [room, setRoom] = useState("")
+  const [username, setUserName] = useState("");
+  const [room, setRoom] = useState("");
+  const [inputValues, setInputValues] = useState({ username: "", room: "" });
+  const [isJoined, setIsJoined] = useState(false);
 
   const joinRoom = () => {
-    if (username !== "" && room !== "") {
-      socket.emit("join_room", room)
+    if (inputValues.username !== "" && inputValues.room !== "") {
+      setUserName(inputValues.username);
+      setRoom(inputValues.room);
+      socket.emit("join_room", inputValues.room);
+      setIsJoined(true);
     }
-  }
+  };
 
   return (
-    <div className="flex justify-center items-center h-screen bg-gray-900">
-      <div className="flex flex-col items-start gap-6 p-6 bg-gray-800 rounded-lg shadow-lg">
-        <h1 className="text-white text-2xl font-bold">Join a room</h1>
+    <div className='flex justify-center items-center h-screen bg-gray-900'>
+      <div className='flex flex-col items-start gap-8 p-8 bg-gray-800 rounded-lg shadow-xl w-[400px]'>
+        <h1 className='text-white text-3xl font-semibold text-center mb-6'>
+          Join a room
+        </h1>
+
         <input
-          type="text"
-          placeholder="Username"
-          onChange={(event) => setUserName(event.target.value)}
-          className="p-2 bg-gray-700 text-white rounded-md w-64"
+          type='text'
+          placeholder='Username'
+          value={inputValues.username}
+          onChange={(event) =>
+            setInputValues({ ...inputValues, username: event.target.value })
+          }
+          className={`p-3 bg-gray-700 text-white rounded-md w-full mb-4 transition-all duration-300 ease-in-out ${
+            isJoined ? "cursor-not-allowed bg-gray-600" : ""
+          }`}
+          readOnly={isJoined}
         />
+
         <input
-          type="text"
-          placeholder="Room name"
-          onChange={(event) => setRoom(event.target.value)}
-          className="p-2 bg-gray-700 text-white rounded-md w-64"
+          type='text'
+          placeholder='Room name'
+          value={inputValues.room}
+          onChange={(event) =>
+            setInputValues({ ...inputValues, room: event.target.value })
+          }
+          className={`p-3 bg-gray-700 text-white rounded-md w-full mb-6 transition-all duration-300 ease-in-out ${
+            isJoined ? "cursor-not-allowed bg-gray-600" : ""
+          }`}
+          readOnly={isJoined}
         />
+
         <button
           onClick={joinRoom}
-          className="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded-md w-64"
+          disabled={isJoined}
+          className={`w-full py-3 px-4 font-semibold text-lg text-white rounded-lg transition-all duration-300 ease-in-out ${
+            isJoined
+              ? "bg-gray-500 cursor-not-allowed"
+              : "bg-blue-500 hover:bg-blue-600"
+          }`}
         >
-          Click to join
+          {isJoined ? "Joined" : "Click to join"}
         </button>
       </div>
       <Chat socket={socket} username={username} room={room} />
     </div>
-  )
+  );
 }
 
-export default App
+export default App;
