@@ -5,10 +5,10 @@ import Chat from "./component/Chat";
 import "./css/tailwind.css";
 
 function App() {
-  const socket = io(
-    "https://groupchat-socketio-backend-production.up.railway.app"
-  );
-  // const socket = io("http://localhost:3001")
+  // const socket = io(
+  //   "https://groupchat-socketio-backend-production.up.railway.app"
+  // );
+  const socket = io("http://localhost:3001");
 
   const [username, setUserName] = useState("");
   const [room, setRoom] = useState("");
@@ -19,7 +19,11 @@ function App() {
     if (inputValues.username !== "" && inputValues.room !== "") {
       setUserName(inputValues.username);
       setRoom(inputValues.room);
-      socket.emit("join_room", inputValues.room);
+
+      socket.emit("join_room", {
+        username: inputValues.username,
+        room: inputValues.room,
+      });
       setIsJoined(true);
     }
   };
