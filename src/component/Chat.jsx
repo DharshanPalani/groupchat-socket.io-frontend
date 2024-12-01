@@ -1,10 +1,13 @@
-import React, { useEffect, useState } from "react";
-import ScrollToBottom from "react-scroll-to-bottom";
+import React, { useEffect, useState, useRef } from "react";
+import Picker from "@emoji-mart/react";
+import data from "@emoji-mart/data";
 import "../css/tailwind.css";
 
 function Chat({ socket, username, room }) {
   const [currentMessage, setCurrentMessage] = useState("");
   const [messageList, setMessageList] = useState([]);
+  const [emojiPickerVisible, setEmojiPickerVisible] = useState(false);
+  const messagesEndRef = useRef(null);
 
   const sendMessage = async () => {
     if (currentMessage !== "") {
@@ -24,11 +27,19 @@ function Chat({ socket, username, room }) {
     socket.emit("exit_room", { username, room });
   };
 
+  const scrollToBottom = () => {
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  };
+
   useEffect(() => {
     socket.on("receive_message", (data) => {
       setMessageList((list) => [...list, data]);
     });
   }, [socket]);
+
+  useEffect(() => {
+    scrollToBottom();
+  }, [messageList]);
 
   return (
     <div className='w-[800px] h-[600px] bg-[#2c2f33] rounded-xl shadow-lg flex flex-col overflow-hidden text-white ml-96'>
@@ -42,7 +53,7 @@ function Chat({ socket, username, room }) {
         <p>{room === "" ? "Chat" : room}</p>
       </div>
       <div className='flex-1 p-3 overflow-y-auto flex flex-col'>
-        <ScrollToBottom className='flex flex-col gap-4'>
+        <div className='flex flex-col gap-4'>
           {messageList.map((messageContent, index) => {
             return messageContent.author === "System" ? (
               <div
@@ -81,16 +92,17 @@ function Chat({ socket, username, room }) {
                     {messageContent.message}
                   </div>
                   <div className='text-xs text-[#b9bbbe] flex gap-2'>
-                    <p>{messageContent.time}</p>
+                    {/* <p>{messageContent.time}</p> */}
                     <p>{messageContent.author}</p>
                   </div>
                 </div>
               </div>
             );
           })}
-        </ScrollToBottom>
+        </div>
+        <div ref={messagesEndRef} />
       </div>
-      <div className='flex p-3 bg-[#23272a] border-t border-[#1e2124] items-center'>
+      <div className='flex p-3 bg-[#23272a] border-t border-[#1e2124] items-center relative'>
         <input
           type='text'
           value={currentMessage}
@@ -99,6 +111,22 @@ function Chat({ socket, username, room }) {
           onKeyPress={(event) => event.key === "Enter" && sendMessage()}
           className='flex-1 p-3 rounded-full bg-[#40444b] text-white text-sm outline-none'
         />
+        <button
+          className='bg-[#5865f2] text-white p-2.5 rounded-full ml-2 hover:bg-[#4752c4] focus:outline-none'
+          onClick={() => setEmojiPickerVisible((prev) => !prev)}
+        >
+          ☺
+        </button>
+        {emojiPickerVisible && (
+          <div className='absolute bottom-[60px] right-[75px] z-10'>
+            <Picker
+              data={data}
+              onEmojiSelect={(emoji) =>
+                setCurrentMessage((prev) => prev + emoji.native)
+              }
+            />
+          </div>
+        )}
         <button
           onClick={sendMessage}
           className='bg-[#5865f2] text-white p-2.5 rounded-full ml-2 hover:bg-[#4752c4] focus:outline-none'
