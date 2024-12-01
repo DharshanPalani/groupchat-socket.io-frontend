@@ -86,7 +86,7 @@ function Chat({ socket, username, room }) {
                     username === messageContent.author
                       ? "rounded-br-none"
                       : "rounded-bl-none"
-                  } max-w-[100%]`}
+                  } max-w-[98%]`}
                 >
                   <div className='text-sm text-white leading-relaxed mb-2'>
                     {messageContent.message}
