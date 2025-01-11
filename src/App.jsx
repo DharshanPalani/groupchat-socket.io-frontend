@@ -6,7 +6,7 @@ import "./css/tailwind.css";
 
 function App() {
   const socket = io(
-    "https://groupchat-socketio-backend-production.up.railway.app"
+    "https://groupchat-socket-io-backend.vercel.app/"
   );
   // const socket = io("http://localhost:3001");
 
@@ -42,9 +42,8 @@ function App() {
           onChange={(event) =>
             setInputValues({ ...inputValues, username: event.target.value })
           }
-          className={`p-3 bg-gray-700 text-white rounded-md w-full mb-4 transition-all duration-300 ease-in-out ${
-            isJoined ? "cursor-not-allowed bg-gray-600" : ""
-          }`}
+          className={`p-3 bg-gray-700 text-white rounded-md w-full mb-4 transition-all duration-300 ease-in-out ${isJoined ? "cursor-not-allowed bg-gray-600" : ""
+            }`}
           readOnly={isJoined}
         />
 
@@ -55,20 +54,18 @@ function App() {
           onChange={(event) =>
             setInputValues({ ...inputValues, room: event.target.value })
           }
-          className={`p-3 bg-gray-700 text-white rounded-md w-full mb-6 transition-all duration-300 ease-in-out ${
-            isJoined ? "cursor-not-allowed bg-gray-600" : ""
-          }`}
+          className={`p-3 bg-gray-700 text-white rounded-md w-full mb-6 transition-all duration-300 ease-in-out ${isJoined ? "cursor-not-allowed bg-gray-600" : ""
+            }`}
           readOnly={isJoined}
         />
 
         <button
           onClick={joinRoom}
           disabled={isJoined}
-          className={`w-full py-3 px-4 font-semibold text-lg text-white rounded-lg transition-all duration-300 ease-in-out ${
-            isJoined
+          className={`w-full py-3 px-4 font-semibold text-lg text-white rounded-lg transition-all duration-300 ease-in-out ${isJoined
               ? "bg-gray-500 cursor-not-allowed"
               : "bg-blue-500 hover:bg-blue-600"
-          }`}
+            }`}
         >
           {isJoined ? "Joined" : "Click to join"}
         </button>
