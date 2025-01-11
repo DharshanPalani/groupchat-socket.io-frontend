@@ -6,7 +6,7 @@ import "./css/tailwind.css";
 
 function App() {
   const socket = io(
-    "https://groupchat-socket-io-backend.vercel.app/"
+    "https://groupchat-socket-io-backend.vercel.app"
   );
   // const socket = io("http://localhost:3001");
 
@@ -63,8 +63,8 @@ function App() {
           onClick={joinRoom}
           disabled={isJoined}
           className={`w-full py-3 px-4 font-semibold text-lg text-white rounded-lg transition-all duration-300 ease-in-out ${isJoined
-              ? "bg-gray-500 cursor-not-allowed"
-              : "bg-blue-500 hover:bg-blue-600"
+            ? "bg-gray-500 cursor-not-allowed"
+            : "bg-blue-500 hover:bg-blue-600"
             }`}
         >
           {isJoined ? "Joined" : "Click to join"}
